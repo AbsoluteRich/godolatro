@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://bhleyowdl0psr"]
+
+[ext_resource type="Script" uid="uid://b5gatafiweu3w" path="res://scripts/slots.gd" id="1_xs8oc"]
+[ext_resource type="Texture2D" uid="uid://w7q20v52xfc6" path="res://assets/slots/slot-machine1.png" id="2_6pb1a"]
+[ext_resource type="Texture2D" uid="uid://dmci03km8pdga" path="res://assets/slots/slot-machine3.png" id="3_ls14r"]
+[ext_resource type="Texture2D" uid="uid://dpin0wc0n0jq0" path="res://assets/slots/slot-machine2.png" id="4_6kwmw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u5sy4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ls14r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6kwmw")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_xs8oc")
+
+[node name="SlotMachine" type="Sprite2D" parent="."]
+position = Vector2(408, 312)
+texture = ExtResource("2_6pb1a")
+
+[node name="Lever" type="AnimatedSprite2D" parent="."]
+position = Vector2(408, 312)
+sprite_frames = SubResource("SpriteFrames_u5sy4")
+frame = 1
