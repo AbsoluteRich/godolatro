@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://twfsg6y1kjws"]
+
+[ext_resource type="Script" uid="uid://b7tdwg71w2g4o" path="res://scripts/card.gd" id="1_d81rb"]
+
+[node name="Card" type="TextureRect" unique_id=382200803]
+script = ExtResource("1_d81rb")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

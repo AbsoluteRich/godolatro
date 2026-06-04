@@ -55,5 +55,5 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Discard"
 
-[connection signal="pressed" from="MarginContainer/Controls/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="MarginContainer/Controls/Discard" to="." method="_on_discard_pressed"]
+[connection signal="pressed" from="MarginContainer/Controls/Play" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Controls/Discard" to="." method="_on_discard_button_pressed"]
