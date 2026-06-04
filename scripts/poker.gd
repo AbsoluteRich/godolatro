@@ -28,22 +28,24 @@ func construct_deck():
 func draw_card():
 	var chosenCard: String
 	if deck.is_empty():
-		return "Clubs2"  # Todo: Special logic required
-	
+		return [false, null]  # Todo: Special logic required
+
 	chosenCard = deck[0]
 	deck.pop_at(0)
-	return chosenCard
+	return [true, chosenCard]
 
 
 func draw_hand():
 	for child in %Cards.get_children():
 		child.queue_free()
-	
+
 	for i in range(7):
 		var cardData = draw_card()
-		var card = TextureRect.new()
-		card.texture = load("res://assets/cards/card%s.png" % cardData)
-		%Cards.add_child(card)
+
+		if cardData[0]:
+			var card = TextureRect.new()
+			card.texture = load("res://assets/cards/card%s.png" % cardData[1])
+			%Cards.add_child(card)
 
 
 func _ready():
@@ -54,3 +56,11 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("gamble"):
 		draw_hand()
+
+
+func _on_play_pressed() -> void:
+	pass  # Replace with function body.
+
+
+func _on_discard_pressed() -> void:
+	pass  # Replace with function body.
