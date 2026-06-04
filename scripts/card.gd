@@ -21,25 +21,30 @@ static func create(new_suit: Suits, new_rank: int) -> Card:
 	return new_card
 
 
-func _to_string() -> String:
-	var properSuit: String
-	var properRank: String
+func destroy() -> void:
+	all_selected -= 1
+	self.queue_free()
 
-	properSuit = Suits.find_key(self.suit)
+
+func _to_string() -> String:
+	var proper_suit: String
+	var proper_rank: String
+
+	proper_suit = Suits.find_key(self.suit)
 
 	match self.rank:
 		11:
-			properRank = "J"
+			proper_rank = "J"
 		12:
-			properRank = "Q"
+			proper_rank = "Q"
 		13:
-			properRank = "K"
+			proper_rank = "K"
 		14:
-			properRank = "A"
+			proper_rank = "A"
 		_:
-			properRank = str(self.rank)
+			proper_rank = str(self.rank)
 
-	return properSuit + properRank
+	return proper_suit + proper_rank
 
 
 # https://www.reddit.com/r/godot/comments/1gfl4m7/comment/luigfzf/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button

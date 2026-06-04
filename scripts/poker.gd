@@ -47,27 +47,19 @@ func sort_cards() -> void:
 		%Cards.move_child(sorted_cards[i], i)
 
 
-func draw_card() -> Card:
-	var chosenCard: Card
-	if deck.is_empty():
-		return null
-
-	chosenCard = deck[0]
-	deck.pop_at(0)
-	return chosenCard
-
-
-func deal_cards(count: int) -> void:
+func draw_cards(count: int) -> void:
 	for i in range(count):
-		var new_card: Card = draw_card()
+		var new_card: Card
 
-		if new_card != null:
+		if not deck.is_empty():
+			new_card = deck[0]
+			deck.pop_at(0)
 			%Cards.add_child(new_card)
 
 
 func _ready() -> void:
 	construct_deck()
-	deal_cards(7)
+	draw_cards(7)
 	sort_cards()
 
 
@@ -80,11 +72,9 @@ func _on_play_button_pressed() -> void:
 func _on_discard_button_pressed() -> void:
 	for child in %Cards.get_children():
 		if child.selected:
-			Card.all_selected -= 1
-			child.queue_free()
-			deal_cards(1)
+			child.destroy()
+			draw_cards(1)
 
 
 func _on_sort_button_pressed() -> void:
 	sort_cards()
-
