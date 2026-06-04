@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dkxnbqyapblpo"]
 
 [ext_resource type="Script" uid="uid://wso5ers6dsll" path="res://scripts/poker.gd" id="1_0lho4"]
+[ext_resource type="Theme" uid="uid://dnna6psr73edc" path="res://assets/core.tres" id="2_tv38l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_qoub5"]
 font_size = 60
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_tv38l")
 script = ExtResource("1_0lho4")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1210186980]
@@ -44,16 +46,20 @@ theme_override_constants/separation = 24
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+theme_override_constants/separation = 32
 
 [node name="Play" type="Button" parent="MarginContainer/Controls" unique_id=1100702915]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "Play"
 
 [node name="Discard" type="Button" parent="MarginContainer/Controls" unique_id=1899566449]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "Discard"
+
+[node name="Sort" type="Button" parent="MarginContainer/Controls" unique_id=1759816418]
+layout_mode = 2
+text = "Sort"
 
 [connection signal="pressed" from="MarginContainer/Controls/Play" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Controls/Discard" to="." method="_on_discard_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Controls/Sort" to="." method="_on_sort_button_pressed"]
