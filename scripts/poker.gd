@@ -1,10 +1,22 @@
 extends Control
 
 var deck: Array[Card] = []
+enum HandType {
+	RoyalFlush,
+	StraightFlush,
+	FourOfAKind,
+	FullHouse,
+	Flush,
+	Straight,
+	ThreeOfAKind,
+	TwoPair,
+	Pair,
+	HighCard
+}
 
 
 func construct_deck() -> void:
-	for suit in Card.Suits.values():
+	for suit in Card.Suit.values():
 		for rank in range(2, 15):
 			# Behind the scenes, Enums are technically just an array of ints
 			# Therefore, something that accepts an Enum as a parameter needs a int, not a String
@@ -14,7 +26,7 @@ func construct_deck() -> void:
 
 
 func sort_cards() -> void:
-	var sorted_cards = %Cards.get_children().duplicate()
+	var sorted_cards: Array[Node] = %Cards.get_children().duplicate()
 	var list_length: int = len(sorted_cards)
 
 	for i in range(list_length):
@@ -57,6 +69,49 @@ func draw_cards(count: int) -> void:
 			%Cards.add_child(new_card)
 
 
+func evaluate_hand(hand: Array[Node]) -> HandType:
+	var card_frequencies: Dictionary
+	var has_three_of_a_kind: bool
+	var pair_count: int = 0
+	var is_flush: bool = false  # Todo
+	var is_straight: bool = false  # Todo, account for wheels and Broadways somehow
+
+	for first_card in hand:
+		var running_count: int = 0
+
+		for card in hand:
+			if card.rank == first_card.rank:
+				running_count += 1
+
+		card_frequencies[first_card.rank] = running_count
+		running_count = 0
+
+	for rank in card_frequencies:
+		if card_frequencies[rank] == 4:
+			return HandType.FourOfAKind
+		elif card_frequencies[rank] == 3:
+			has_three_of_a_kind = true
+		elif card_frequencies[rank] == 2:
+			pair_count += 1
+
+	if is_flush and is_straight:
+		return HandType.StraightFlush
+	elif has_three_of_a_kind and pair_count == 1:
+		return HandType.FullHouse
+	elif is_flush:
+		return HandType.Flush
+	elif is_straight:
+		return HandType.Straight
+	elif has_three_of_a_kind:
+		return HandType.ThreeOfAKind
+	elif pair_count == 2:
+		return HandType.TwoPair
+	elif pair_count == 1:
+		return HandType.Pair
+
+	return HandType.HighCard
+
+
 func _ready() -> void:
 	construct_deck()
 	draw_cards(7)
@@ -64,9 +119,13 @@ func _ready() -> void:
 
 
 func _on_play_button_pressed() -> void:
+	var played_hand: Array[Node]
+
 	for child in %Cards.get_children():
 		if child.selected:
-			print(child)
+			played_hand.append(child)
+
+	print(HandType.find_key(evaluate_hand(played_hand)))
 
 
 func _on_discard_button_pressed() -> void:

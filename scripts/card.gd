@@ -5,15 +5,15 @@ extends TextureRect
 static var scene: PackedScene = preload("res://scenes/card.tscn")
 static var all_selected: int = 0
 
-enum Suits { Clubs, Diamonds, Hearts, Spades }
+enum Suit { Clubs, Diamonds, Hearts, Spades }
 
 var rank: int
-var suit: Suits
+var suit: Suit
 
 @export var selected: bool
 
 
-static func create(new_suit: Suits, new_rank: int) -> Card:
+static func create(new_suit: Suit, new_rank: int) -> Card:
 	var new_card: Card = scene.instantiate()
 	new_card.suit = new_suit
 	new_card.rank = new_rank
@@ -30,7 +30,7 @@ func _to_string() -> String:
 	var proper_suit: String
 	var proper_rank: String
 
-	proper_suit = Suits.find_key(self.suit)
+	proper_suit = Suit.find_key(self.suit)
 
 	match self.rank:
 		11:
