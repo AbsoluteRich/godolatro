@@ -13,8 +13,9 @@ func construct_deck() -> void:
 	assert(deck.size() == 52)
 
 
-func sort_cards(card_list: Array[Node]) -> Array[Node]:
-	var list_length: int = len(card_list)
+func sort_cards() -> void:
+	var sorted_cards = %Cards.get_children().duplicate()
+	var list_length: int = len(sorted_cards)
 
 	for i in range(list_length):
 		var swapped: bool = false
@@ -24,25 +25,26 @@ func sort_cards(card_list: Array[Node]) -> Array[Node]:
 			var swap: bool = false
 
 			# Rank sorting
-			if card_list[j].rank > card_list[j + 1].rank:
+			if sorted_cards[j].rank > sorted_cards[j + 1].rank:
 				swap = true
 
 			# Suit sorting (uses the rule Clubs > Diamonds > Hearts > Spades)
 			# Because there can't be duplicate suits (at least for now), this always produces a definitely sorted list
-			elif card_list[j].rank == card_list[j + 1].rank:
-				if card_list[j].suit > card_list[j + 1].suit:
+			elif sorted_cards[j].rank == sorted_cards[j + 1].rank:
+				if sorted_cards[j].suit > sorted_cards[j + 1].suit:
 					swap = true
 
 			if swap:
-				var temp: Card = card_list[j]
-				card_list[j] = card_list[j + 1]
-				card_list[j + 1] = temp
+				var temp: Card = sorted_cards[j]
+				sorted_cards[j] = sorted_cards[j + 1]
+				sorted_cards[j + 1] = temp
 				swapped = true
 
 		if swapped == false:
 			break
 
-	return card_list
+	for i in len(sorted_cards):
+		%Cards.move_child(sorted_cards[i], i)
 
 
 func draw_card() -> Card:
@@ -66,6 +68,7 @@ func deal_cards(count: int) -> void:
 func _ready() -> void:
 	construct_deck()
 	deal_cards(7)
+	sort_cards()
 
 
 func _on_play_button_pressed() -> void:
@@ -83,11 +86,5 @@ func _on_discard_button_pressed() -> void:
 
 
 func _on_sort_button_pressed() -> void:
-	var all: Array[Node] = %Cards.get_children()
-	var sorted: Array[Node] = sort_cards(%Cards.get_children().duplicate())
+	sort_cards()
 
-	for node in all:
-		print("ALL: ", node)
-
-	for node in sorted:
-		print("SORTED: ", node)
