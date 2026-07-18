@@ -14,10 +14,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="Gamblin"
+config/name="Godolatro"
 run/main_scene="uid://dkxnbqyapblpo"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Events="*uid://wv5adlec5ejr"
 
 [input]
 

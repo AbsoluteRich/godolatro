@@ -4,12 +4,10 @@ extends TextureRect
 # https://www.reddit.com/r/godot/comments/13pm5o5/comment/ktmmqp0/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 static var scene: PackedScene = preload("res://scenes/card.tscn")
 static var all_selected: int = 0
-
 enum Suit { Clubs, Diamonds, Hearts, Spades }
 
 var rank: int
 var suit: Suit
-
 @export var selected: bool
 
 
@@ -62,3 +60,5 @@ func _on_gui_input(event: InputEvent) -> void:
 			else:
 				all_selected -= 1
 				self.modulate = Color.WHITE
+
+			Events.card_selected.emit()

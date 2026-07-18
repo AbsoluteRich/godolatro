@@ -28,12 +28,20 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="Title" type="Label" parent="MarginContainer" unique_id=1157004876]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=926797885]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1157004876]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-text = "Gamblin"
+text = "Godolatro"
 label_settings = SubResource("LabelSettings_qoub5")
+
+[node name="Hand" type="Label" parent="MarginContainer/VBoxContainer" unique_id=902146108]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Cards" type="HBoxContainer" parent="MarginContainer" unique_id=1650572673]
 unique_name_in_owner = true
@@ -60,6 +68,6 @@ text = "Discard"
 layout_mode = 2
 text = "Sort"
 
-[connection signal="pressed" from="MarginContainer/Controls/Play" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Controls/Play" to="." method="display_hand"]
 [connection signal="pressed" from="MarginContainer/Controls/Discard" to="." method="_on_discard_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Controls/Sort" to="." method="_on_sort_button_pressed"]

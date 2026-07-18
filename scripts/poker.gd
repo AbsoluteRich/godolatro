@@ -15,6 +15,14 @@ enum HandType {
 }
 
 
+func _ready() -> void:
+	Events.card_selected.connect(display_hand)
+	construct_deck()
+	draw_cards(7)
+	sort_cards()
+
+
+# Poker logic
 func construct_deck() -> void:
 	for suit in Card.Suit.values():
 		for rank in range(2, 15):
@@ -23,40 +31,6 @@ func construct_deck() -> void:
 			deck.append(Card.create(suit, rank))
 	deck.shuffle()
 	assert(deck.size() == 52)
-
-
-func sort_cards() -> void:
-	var sorted_cards: Array[Node] = %Cards.get_children().duplicate()
-	var list_length: int = len(sorted_cards)
-
-	for i in range(list_length):
-		var swapped: bool = false
-
-		for j in range(0, list_length - i - 1):
-			# Swap is set to true if the FIRST card is "more" than the SECOND card
-			var swap: bool = false
-
-			# Rank sorting
-			if sorted_cards[j].rank > sorted_cards[j + 1].rank:
-				swap = true
-
-			# Suit sorting (uses the rule Clubs > Diamonds > Hearts > Spades)
-			# Because there can't be duplicate suits (at least for now), this always produces a definitely sorted list
-			elif sorted_cards[j].rank == sorted_cards[j + 1].rank:
-				if sorted_cards[j].suit > sorted_cards[j + 1].suit:
-					swap = true
-
-			if swap:
-				var temp: Card = sorted_cards[j]
-				sorted_cards[j] = sorted_cards[j + 1]
-				sorted_cards[j + 1] = temp
-				swapped = true
-
-		if swapped == false:
-			break
-
-	for i in len(sorted_cards):
-		%Cards.move_child(sorted_cards[i], i)
 
 
 func draw_cards(count: int) -> void:
@@ -71,10 +45,11 @@ func draw_cards(count: int) -> void:
 
 func evaluate_hand(hand: Array[Node]) -> HandType:
 	var card_frequencies: Dictionary
+
 	var has_three_of_a_kind: bool
 	var pair_count: int = 0
 	var is_flush: bool = false  # Todo
-	var is_straight: bool = false  # Todo, account for wheels and Broadways somehow
+	var is_straight: bool = false  # Todo, and account for wheels and Broadways somehow
 
 	for first_card in hand:
 		var running_count: int = 0
@@ -108,24 +83,61 @@ func evaluate_hand(hand: Array[Node]) -> HandType:
 		return HandType.TwoPair
 	elif pair_count == 1:
 		return HandType.Pair
-
 	return HandType.HighCard
 
 
-func _ready() -> void:
-	construct_deck()
-	draw_cards(7)
-	sort_cards()
+# Game logic
+func sort_cards() -> void:
+	var sorted_cards: Array[Node] = %Cards.get_children().duplicate()
+	var list_length: int = len(sorted_cards)
+
+	for i in range(list_length):
+		var swapped: bool = false
+
+		for j in range(0, list_length - i - 1):
+			# Swap is set to true if the FIRST card is "more" than the SECOND card
+			var swap: bool = false
+
+			# Rank sorting
+			if sorted_cards[j].rank > sorted_cards[j + 1].rank:
+				swap = true
+
+			# Suit sorting (uses the rule Clubs > Diamonds > Hearts > Spades)
+			# Because there can't be duplicate suits (at least for now), this always produces a definitively sorted list
+			# Exploit the fact that enums are fancy ints
+			elif sorted_cards[j].rank == sorted_cards[j + 1].rank:
+				if sorted_cards[j].suit > sorted_cards[j + 1].suit:
+					swap = true
+
+			if swap:
+				var temp: Card = sorted_cards[j]
+				sorted_cards[j] = sorted_cards[j + 1]
+				sorted_cards[j + 1] = temp
+				swapped = true
+
+		if swapped == false:
+			break
+
+	for i in len(sorted_cards):
+		%Cards.move_child(sorted_cards[i], i)
 
 
-func _on_play_button_pressed() -> void:
+func get_readable_hand(hand: HandType):
+	return HandType.find_key(hand)
+
+
+# Event handlers
+func display_hand() -> void:
 	var played_hand: Array[Node]
 
 	for child in %Cards.get_children():
 		if child.selected:
 			played_hand.append(child)
 
-	print(HandType.find_key(evaluate_hand(played_hand)))
+	if played_hand:
+		%Hand.text = get_readable_hand(evaluate_hand(played_hand))
+	else:
+		%Hand.text = ""
 
 
 func _on_discard_button_pressed() -> void:
